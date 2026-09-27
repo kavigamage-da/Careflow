@@ -1,117 +1,547 @@
-# CareFlow Hospital Management System
+# CareFlow — Hospital Workflow Management System
 
-CareFlow is an Android hospital workflow management system developed as an academic and portfolio software project. It demonstrates secure role-based digital workflows across patient reception, queue management, clinical documentation, laboratory, pharmacy, billing, and operational reporting.
+<p align="center">
+  <strong>Android-based Hospital Workflow & Information Management System</strong><br>
+  Academic & Portfolio Software Project
+</p>
 
-> **CRITICAL MEDICAL & CLINICAL SAFETY NOTICE**
-> CareFlow is an operational, information-management, and decision-support tool. It does **NOT** automatically diagnose patients, prescribe medications, or replace the clinical judgment of licensed healthcare professionals. All medical decisions remain the sole responsibility of qualified practitioners.
+<p align="center">
+  <img src="https://img.shields.io/badge/Platform-Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android">
+  <img src="https://img.shields.io/badge/Language-Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white" alt="Kotlin">
+  <img src="https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white" alt="Jetpack Compose">
+  <img src="https://img.shields.io/badge/Database-Room-6DB33F?style=for-the-badge" alt="Room">
+</p>
+
+<p align="center">
+  <a href="https://github.com/kavigamage-da/CareFlow">
+    <img src="https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github" alt="GitHub Repository">
+  </a>
+</p>
 
 ---
 
-## 🏥 Operational Flow
+## 📌 Overview
 
+**CareFlow** is an Android hospital workflow and information-management system developed as an academic and portfolio software project.
+
+The system demonstrates how multiple hospital operational roles can work through a connected digital workflow covering:
+
+* Patient registration and management
+* Queue and check-in management
+* Nurse triage and vital signs
+* Doctor consultation documentation
+* Prescription management
+* Laboratory workflows
+* Pharmacy dispensing
+* Billing and payments
+* Operational reporting
+* Security and audit logging
+
+CareFlow is designed to demonstrate **role-based workflows, local data management, business rules, security controls, and end-to-end information flow** within a healthcare-oriented software environment.
+
+> **⚠️ Medical & Clinical Safety Notice**
+>
+> CareFlow is an operational, information-management, and decision-support software project. It does **not** automatically diagnose patients, independently prescribe medication, or replace the professional judgment of qualified healthcare practitioners.
+>
+> The clinical information represented in the application is intended for demonstration and academic purposes.
+
+---
+
+# 🏥 Hospital Workflow
+
+```text
+                         ┌──────────────────────┐
+                         │   Patient Arrival    │
+                         └──────────┬───────────┘
+                                    │
+                                    ▼
+                         ┌──────────────────────┐
+                         │ Reception / Check-In │
+                         └──────────┬───────────┘
+                                    │
+                                    ▼
+                         ┌──────────────────────┐
+                         │   Queue Management   │
+                         └──────────┬───────────┘
+                                    │
+                                    ▼
+                         ┌──────────────────────┐
+                         │ Nurse Triage / Vitals│
+                         └──────────┬───────────┘
+                                    │
+                                    ▼
+                         ┌──────────────────────┐
+                         │ Doctor Consultation  │
+                         └───────┬───────┬──────┘
+                                 │       │
+                    ┌────────────┘       └────────────┐
+                    ▼                                 ▼
+          ┌──────────────────┐              ┌──────────────────┐
+          │ Laboratory       │              │ Prescription     │
+          │ Diagnostics      │              │                  │
+          └────────┬─────────┘              └────────┬─────────┘
+                   │                                 │
+                   ▼                                 ▼
+          ┌──────────────────┐              ┌──────────────────┐
+          │ Results / Verify │              │ Pharmacy         │
+          └────────┬─────────┘              │ Dispensing       │
+                   │                        └────────┬─────────┘
+                   └──────────────┬─────────────────┘
+                                  ▼
+                         ┌──────────────────────┐
+                         │ Billing & Payment    │
+                         └──────────┬───────────┘
+                                    │
+                                    ▼
+                         ┌──────────────────────┐
+                         │ Reports & Governance │
+                         └──────────────────────┘
 ```
-[Patient Arrival] ──► [Reception / Registration] ──► [Appointment & Check-In]
-                                                               │
-                                                               ▼
-[Cashier Billing & Receipt] ◄── [Pharmacy Dispense] ◄── [Queue Dispatch]
-            ▲                             ▲                    │
-            │                             │                    ▼
-    [Reports & Admin]             [Lab Diagnostic]     [Nurse Triage & Vitals]
-            ▲                             ▲                    │
-            │                             │                    ▼
-    [Audit Governance] ◄────────── [Doctor Consultation & Prescription]
+
+---
+
+# 👥 Role-Based Access
+
+CareFlow implements role-based access control across **10 hospital roles**:
+
+| Role             | Main Responsibility                      |
+| ---------------- | ---------------------------------------- |
+| `PATIENT`        | Patient-facing access                    |
+| `RECEPTIONIST`   | Patient registration and check-in        |
+| `QUEUE_OPERATOR` | Queue dispatch and ticket management     |
+| `NURSE`          | Triage and vital-sign recording          |
+| `DOCTOR`         | Consultation and clinical documentation  |
+| `LAB_TECHNICIAN` | Laboratory specimen and result workflow  |
+| `PHARMACIST`     | Prescription verification and dispensing |
+| `CASHIER`        | Billing and payment processing           |
+| `HOSPITAL_ADMIN` | Operational reporting and administration |
+| `SUPER_ADMIN`    | System-level administration              |
+
+Access to protected operations is enforced through role-aware application and repository-level checks.
+
+---
+
+# 🚀 Implemented Modules
+
+## 🔐 1. Authentication, Security & RBAC
+
+* 10-role access-control model
+* Salted SHA-256 password hashing
+* Cryptographically generated per-password salt
+* Password policy enforcement
+* Failed-login attempt tracking
+* Account lockout after repeated failures
+* Configurable inactivity session timeout
+* Session token handling
+* Role-based navigation and authorization
+* Append-oriented security audit logging
+
+---
+
+## 👤 2. Patient Management
+
+* Patient registration
+* Automated Medical Record Number generation
+
+```text
+CF-YYYY-XXXXXX
+```
+
+* Patient demographic information
+* Patient search
+* Patient profile
+* Demographic updates
+* Duplicate detection using available patient attributes
+* Patient-related workflow history
+
+---
+
+## 🎫 3. Queue Management & Check-In
+
+Supported workflow includes:
+
+```text
+WAITING
+   ↓
+CALLED
+   ↓
+IN_CONSULTATION
+   ↓
+COMPLETED
+```
+
+Additional states include:
+
+```text
+SKIPPED
+CANCELLED
+```
+
+Features include:
+
+* Department-based queue tickets
+* Standard priority
+* Fast-track priority
+* Urgent priority
+* Emergency priority
+* Ticket paging
+* Recall tracking
+* Department transfer
+* Duplicate active-ticket prevention
+* Queue-state validation
+* Concurrency-aware queue updates
+
+Example ticket:
+
+```text
+G-101
 ```
 
 ---
 
-## 🚀 Key Capabilities (Implemented Phases 1 - 9)
+## 🩺 4. Nurse Triage & Vital Signs
 
-- **Phase 1 — Security, Auth & RBAC:**
-  - 10 hospital roles (`PATIENT`, `RECEPTIONIST`, `QUEUE_OPERATOR`, `DOCTOR`, `NURSE`, `LAB_TECHNICIAN`, `PHARMACIST`, `CASHIER`, `HOSPITAL_ADMIN`, `SUPER_ADMIN`).
-  - Salted SHA-256 password security with per-password salt, 5-attempt rate-limiting, account lockout, inactivity session timeout, and append-oriented security audit logging (`AuditLogEntity`).
-- **Phase 2 — Master Patient Index (MPI):**
-  - Demographic registration with automated MRN generation (`CF-YYYY-XXXXXX`), format validation, and duplicate detection by name + DOB, national ID, or phone.
-  - Patient search, comprehensive medical profile, and demographic updates.
-- **Phase 3 — Queue Management & Check-In:**
-  - Multi-department ticket issuance (Cardiology, General Medicine, Pediatrics, Orthopedics, Emergency).
-  - Priority triage levels: Standard, Fast Track, Urgent, Emergency.
-  - Real-time queue state transitions: `WAITING` ➔ `CALLED` ➔ `IN_CONSULTATION` ➔ `COMPLETED` / `SKIPPED`.
-  - Paging, recall tracking, department transfer, and duplicate ticket prevention.
-- **Phase 4 — Nurse Triage & Vital Signs:**
-  - Standard physiological assessment: Blood Pressure (systolic/diastolic), Pulse, Temperature, SpO2, Respiratory Rate, Height, Weight, and automatic BMI calculation.
-  - Pain score rating (0–10), urgent clinical attention flag, and priority escalation.
-- **Phase 5 — Doctor Consultation Workbench:**
-  - Clinical documentation: Chief complaint, history of present illness, physical examination, assessment, clinician diagnosis, treatment plan, and follow-up instructions.
-  - Electronic prescription ordering with drug dosage, frequency, and instructions.
-  - Diagnostic laboratory test ordering with priority flags (Routine, Urgent, STAT).
-  - Automatic invoice generation upon consultation conclusion.
-- **Phase 6 — Pharmacy Dispensing:**
-  - Workstation displaying active prescriptions, itemized medication verification, batch safety review, and dispensing state tracking.
-- **Phase 7 — Laboratory Diagnostics:**
-  - Workstation for specimen collection, test processing, qualitative/quantitative findings entry, reference interval notes, and supervisory verification.
-- **Phase 8 — Cashier & Billing:**
-  - Itemized patient billing combining consultation, pharmacy, and laboratory fees.
-  - Payment processing (Cash, Card, Insurance) with partial/full settlement and in-app payment receipt generation for demonstration purposes.
-- **Phase 9 — Operational Reporting & Governance:**
-  - Real-time aggregation of hospital KPIs: patient volume, consultation throughput, queue latency, diagnostic orders, pharmacy volume, and revenue accounts.
-  - Security audit log inspection.
+The triage workflow supports recording:
+
+* Blood pressure
+* Pulse
+* Temperature
+* SpO₂
+* Respiratory rate
+* Height
+* Weight
+* BMI calculation
+* Pain score
+* Clinical attention flag
+* Priority escalation
+
+Example:
+
+```text
+Height: 172 cm
+Weight: 70 kg
+
+BMI ≈ 23.7
+```
+
+The system validates entered measurements against configured bounds before storing them.
 
 ---
 
-## 🎬 Recommended End-to-End Demo Flow
+## 👨‍⚕️ 5. Doctor Consultation
 
-1. **LOGIN AS RECEPTIONIST** (`reception.ann` / `Password123!`):
-   - Navigate to **Search Patients** or **Register Patient**.
-   - Open patient profile (e.g. John Doe, `CF-2026-000001`).
-   - Click **Check-In to Queue** ➔ Select Department (e.g., General Medicine) and Priority ➔ Issue Ticket (e.g. `G-101`).
-2. **LOGIN AS QUEUE OPERATOR** (`queue.operator` / `Password123!`):
-   - Open **Queue Dispatch Console**.
-   - Locate ticket `G-101` ➔ Click **Call** (pages patient to consultation room).
-3. **LOGIN AS NURSE** (`nurse.clara` / `Password123!`):
-   - From Dashboard or Queue, select ticket `G-101` ➔ Click **Triage Vitals**.
-   - Review or adjust Blood Pressure, Pulse, SpO2, Temperature, Height/Weight (auto-calculates BMI).
-   - Click **Save Vitals & Complete Triage**.
-4. **LOGIN AS DOCTOR** (`doctor.smith` / `Password123!`):
-   - Open **Consultation Queue** ➔ Click **Start Consult** on ticket `G-101`.
-   - Review vitals summary ➔ Document Chief Complaint, Examination, and Diagnosis.
-   - Prescribe medications (e.g., Amoxicillin 500mg) ➔ Select Lab tests (e.g., Complete Blood Count).
-   - Click **Finalize Consultation & Dispatch Orders**.
-5. **LOGIN AS LAB TECHNICIAN** (`lab.tech` / `Password123!`):
-   - Open **Laboratory Diagnostics**.
-   - Click **Collect Specimen** ➔ Click **Enter Result** (enter findings) ➔ Click **Verify & Release**.
-6. **LOGIN AS PHARMACIST** (`pharma.alex` / `Password123!`):
-   - Open **Pharmacy Dispensing Console**.
-   - Review issued prescription ➔ Click **Verify & Dispense**.
-7. **LOGIN AS CASHIER** (`cashier.david` / `Password123!`):
-   - Open **Cashier Desk** ➔ Select pending invoice for patient.
-   - Click **Pay Bill** ➔ Select Cash/Card ➔ Confirm payment ➔ Click **View Receipt**.
-8. **LOGIN AS HOSPITAL ADMIN / SUPER ADMIN** (`admin` / `Password123!`):
-   - Open **Operational Reports** to inspect updated patient throughput, consultation counts, and revenue.
-   - Open **Security Audit Logs** to review append-oriented security audit log of all events.
+The consultation workflow supports documentation of:
 
----
+* Chief complaint
+* History of present illness
+* Physical examination
+* Assessment
+* Clinician-entered diagnosis
+* Treatment plan
+* Follow-up instructions
 
-## 🛠 Tech Stack
+The doctor can also create:
 
-- **Platform:** Android (Min SDK 24, Target SDK 36)
-- **Language:** Kotlin 2.2+ (Coroutines, Flow, StateFlow)
-- **UI Toolkit:** Jetpack Compose + Material 3 Design System
-- **Navigation:** Navigation Compose with role-guarded routing
-- **Local Persistence:** Room Database (KSP) + Jetpack DataStore
-- **Architecture:** Clean Architecture + Repository Pattern + Dependency Injection
-- **Network / Future API:** Retrofit / OkHttp / Moshi
+### Prescriptions
+
+* Medication
+* Dosage
+* Frequency
+* Instructions
+* Prescription workflow state
+
+### Laboratory Orders
+
+* Laboratory test
+* Priority
+* Request information
+
+Consultation completion can also generate the associated billing workflow.
 
 ---
 
-## Verification Status
+## 💊 6. Pharmacy Dispensing
 
-CareFlow has been verified through:
+The pharmacy workflow supports:
 
-- **Unit tests** for core business logic (authentication, RBAC, patient validation, queue state machine, BMI calculation, billing calculations)
-- **End-to-end workflow tests** verifying data chain integrity across patient registration, queue, triage, consultation, prescriptions, laboratory, pharmacy, and billing
-- **Security verification** including password hashing, RBAC enforcement, and audit logging
-- **Database verification** including entity relationships, foreign keys, indexes, and migrations
-- **Demo data verification** confirming all demo accounts use demonstration data only
+* Viewing issued prescriptions
+* Prescription review
+* Medication verification
+* Dispensing workflow
+* Dispensing state tracking
+
+Example workflow:
+
+```text
+ISSUED
+   ↓
+DISPENSING
+   ↓
+DISPENSED
+```
+
+> The current implementation does not claim to provide full pharmacy inventory management.
+
+---
+
+## 🧪 7. Laboratory Diagnostics
+
+The laboratory workflow supports:
+
+```text
+REQUESTED
+    ↓
+SAMPLE_COLLECTED
+    ↓
+PROCESSING
+    ↓
+COMPLETED
+    ↓
+VERIFIED
+```
+
+Features include:
+
+* Laboratory requests
+* Specimen collection
+* Processing workflow
+* Qualitative / quantitative result entry
+* Reference information
+* Result verification
+* Result release
+
+---
+
+## 💳 8. Billing & Payments
+
+The billing module supports:
+
+* Consultation charges
+* Laboratory charges
+* Pharmacy-related charges
+* Itemized invoices
+* Cash payments
+* Card payments
+* Insurance payments
+* Partial settlement
+* Full settlement
+* Payment calculation
+* Demonstration payment receipts
+
+Payment calculations use decimal-safe monetary handling.
+
+---
+
+## 📊 9. Operational Reporting
+
+The reporting module aggregates information from the local database for operational dashboards.
+
+Examples include:
+
+* Patient volume
+* Consultation activity
+* Queue information
+* Laboratory activity
+* Pharmacy activity
+* Revenue information
+* Operational counts
+
+The reporting layer uses application data rather than hardcoded demonstration KPI values.
+
+---
+
+## 🛡️ 10. Audit & Governance
+
+Critical application activities can be recorded in an append-oriented security audit log.
+
+The audit workflow is intended to support:
+
+* Security monitoring
+* User-action traceability
+* Administrative review
+* Demonstration of governance controls
+
+> The current audit implementation should not be interpreted as a cryptographically tamper-proof or immutable ledger.
+
+---
+
+# 🗄️ Data & Persistence
+
+CareFlow uses an offline-first local persistence approach.
+
+### Room Database
+
+The project contains Room entities covering areas such as:
+
+* Users
+* Patients
+* Queue tickets
+* Clinical encounters
+* Vital signs
+* Prescriptions
+* Laboratory workflows
+* Pharmacy workflows
+* Billing
+* Payments
+* Audit events
+
+Database implementation includes:
+
+* Entity relationships
+* Foreign keys
+* Indexes
+* Type converters
+* Database migrations
+* Repository-based data access
+
+---
+
+# 🏗️ Architecture
+
+CareFlow follows a layered application structure based around:
+
+```text
+┌─────────────────────────────┐
+│       Jetpack Compose UI    │
+├─────────────────────────────┤
+│        ViewModels           │
+├─────────────────────────────┤
+│   Repository / Business     │
+│          Logic              │
+├─────────────────────────────┤
+│        Room Database        │
+├─────────────────────────────┤
+│       Local Storage         │
+└─────────────────────────────┘
+```
+
+Key architectural concepts include:
+
+* Separation of UI and data responsibilities
+* Repository pattern
+* ViewModel-based state management
+* Kotlin Coroutines
+* Flow / StateFlow
+* Room persistence
+* Role-aware navigation
+* Centralized application dependencies
+
+---
+
+# 🛠️ Technology Stack
+
+| Area                    | Technology                            |
+| ----------------------- | ------------------------------------- |
+| Platform                | Android                               |
+| Language                | Kotlin                                |
+| UI                      | Jetpack Compose                       |
+| Design System           | Material 3                            |
+| Navigation              | Navigation Compose                    |
+| Database                | Room                                  |
+| Database Processing     | KSP                                   |
+| Local Preferences       | Jetpack DataStore                     |
+| Asynchronous Processing | Kotlin Coroutines                     |
+| Reactive State          | Flow / StateFlow                      |
+| Architecture            | Repository-based layered architecture |
+| Build System            | Gradle                                |
+| IDE                     | Android Studio                        |
+
+### Android Configuration
+
+```text
+Minimum SDK: 24
+Target SDK: 36
+```
+
+---
+
+# 🔄 End-to-End Demonstration Workflow
+
+A complete demonstration can follow this workflow:
+
+```text
+Reception
+   ↓
+Patient Search / Registration
+   ↓
+Check-In
+   ↓
+Queue Ticket
+   ↓
+Queue Dispatch
+   ↓
+Nurse Triage
+   ↓
+Doctor Consultation
+   ├──────────────► Laboratory
+   │                   ↓
+   │               Result Verification
+   │
+   └──────────────► Prescription
+                       ↓
+                   Pharmacy
+                       ↓
+                    Billing
+                       ↓
+                    Receipt
+                       ↓
+               Reports & Audit Log
+```
+
+### Suggested Demo Accounts
+
+All demonstration accounts use:
+
+```text
+Password123!
+```
+
+Example accounts:
+
+```text
+reception.ann
+queue.operator
+nurse.clara
+doctor.smith
+lab.tech
+pharma.alex
+cashier.david
+admin
+```
+
+> These credentials are for the local demonstration environment only. They must not be treated as production credentials.
+
+---
+
+# 🧪 Verification & Testing
+
+The repository contains automated test definitions covering areas including:
+
+* Authentication and security
+* Role-based access
+* Patient management
+* Queue workflow
+* End-to-end hospital workflow
+
+Current test definitions include:
+
+```text
+SecurityAndAuthTest.kt
+PatientManagementTest.kt
+EndToEndHospitalWorkflowTest.kt
+ExampleUnitTest.kt
+ExampleRobolectricTest.kt
+ExampleInstrumentedTest.kt
+```
+
+The project contains **27 defined tests** in the current test suite.
+
+Additional areas identified for future test expansion include:
+
+* Room persistence and relationships
+* Database migrations
+* Audit-log verification
+* Repository integration testing
 
 ### Build
 
@@ -119,10 +549,143 @@ CareFlow has been verified through:
 ./gradlew :app:assembleDebug
 ```
 
-### Tests
+### Unit Tests
 
 ```bash
 ./gradlew :app:testDebugUnitTest
 ```
 
-> CareFlow is an academic and portfolio software project using local Room storage and demonstration data. It is not presented as a production hospital information system.
+> **Verification note:** The commands above are the intended project verification commands. Local execution may require a correctly configured Android SDK and compatible Android command-line tools.
+
+---
+
+# 📱 Screens / Workflow Areas
+
+The application includes workflow areas for:
+
+```text
+Authentication
+Dashboard
+Patient Management
+Queue Management
+Nurse Triage
+Doctor Consultation
+Prescriptions
+Laboratory
+Pharmacy
+Billing
+Reports
+Audit Logs
+```
+
+---
+
+# 🔒 Security Considerations
+
+CareFlow demonstrates several application-level security controls:
+
+* Salted password hashing
+* Per-password cryptographic salt
+* Password policy enforcement
+* Login failure handling
+* Account lockout
+* Session timeout
+* Role-based authorization
+* Repository-level permission checks
+* Parameterized Room queries
+* Audit logging
+* No hardcoded API secrets
+* No hardcoded signing credentials
+
+CareFlow is nevertheless an **academic and portfolio project**, not a production-certified hospital information system.
+
+---
+
+# 🚧 Current Scope & Limitations
+
+The current implementation intentionally focuses on a local demonstration environment.
+
+The following are **not currently presented as implemented production capabilities**:
+
+* Cloud synchronization
+* Multi-device real-time synchronization
+* Real hospital-system integration
+* FHIR/HL7 integration
+* Production payment gateway
+* Biometric authentication
+* Push notifications / FCM
+* Full pharmacy inventory management
+* Real-world insurance integration
+* Production deployment infrastructure
+* Dedicated emergency-contact management UI
+* Cryptographically tamper-evident audit ledger
+
+These areas could be considered future extensions rather than current capabilities.
+
+---
+
+# 🗺️ Future Development
+
+Potential future extensions include:
+
+* Cloud-backed multi-device synchronization
+* Hospital interoperability
+* FHIR-based healthcare data exchange
+* Push notifications
+* Appointment scheduling
+* Pharmacy inventory management
+* Advanced analytics
+* Backup and recovery infrastructure
+* Stronger audit integrity mechanisms
+* Production-grade authentication infrastructure
+* Automated CI/CD testing
+
+---
+
+# 🎓 Academic & Portfolio Context
+
+CareFlow was developed to demonstrate practical application of:
+
+* Software engineering
+* Database design
+* Mobile application development
+* Role-based access control
+* Business workflow modelling
+* Information management
+* Security concepts
+* Requirements analysis
+* End-to-end workflow design
+* Testing and verification
+
+The project focuses on demonstrating how a complex operational workflow can be translated into a structured Android application.
+
+---
+
+# ⚠️ Project Disclaimer
+
+CareFlow is an **academic and portfolio software project**.
+
+It uses demonstration data and local Room storage and is not presented as a production hospital information system.
+
+It must not be used to make real clinical decisions, diagnose medical conditions, prescribe medication, or replace qualified healthcare professionals.
+
+---
+
+# 👩‍💻 Developer
+
+**Kavindi Gamage**
+
+### Connect
+
+* GitHub: https://github.com/kavigamage-da
+* LinkedIn: https://www.linkedin.com/in/kavindi-gamage-815049386
+ 
+
+---
+
+## ⭐ Project
+
+If you find the project useful for learning about Android development, healthcare workflows, role-based systems, or software engineering, consider giving the repository a ⭐.
+
+**Repository:**
+https://github.com/kavigamage-da/CareFlow
