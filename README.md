@@ -47,6 +47,57 @@ CareFlow is designed to demonstrate **role-based workflows, local data managemen
 
 ---
 
+## 📸 Screenshots
+
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <img src="screenshots/01_login.png" width="260"><br>
+      <sub><b>Staff Terminal Authentication</b><br>Quick demo role sign-in</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="screenshots/03_reception_checkin.png" width="260"><br>
+      <sub><b>Reception & Check-In</b><br>Patient search, register, queue</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="screenshots/04_queue_operations.png" width="260"><br>
+      <sub><b>Queue Operations</b><br>Live queue flow & ticket calling</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <img src="screenshots/05_queue_dispatch.png" width="260"><br>
+      <sub><b>Queue Operator Dashboard</b><br>Dispatch console overview</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="screenshots/06_doctor_consultation.png" width="260"><br>
+      <sub><b>Doctor Consultation</b><br>Clinical consultation workbench</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="screenshots/07_laboratory.png" width="260"><br>
+      <sub><b>Laboratory Diagnostics</b><br>Pathology & diagnostics workstation</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <img src="screenshots/08_pharmacy.png" width="260"><br>
+      <sub><b>Pharmacy Dispensing</b><br>Central pharmacy console</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="screenshots/09_billing_payments.png" width="260"><br>
+      <sub><b>Cashier & Billing</b><br>Revenue & invoice tracking</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="screenshots/02_admin_reports.png" width="260"><br>
+      <sub><b>Operational Reports</b><br>Executive operations overview</sub>
+    </td>
+  </tr>
+</table>
+
+> Screenshots are taken from the live application running against the local demonstration database. To display them on GitHub, place the image files in a `screenshots/` folder at the repository root using the file names referenced above.
+
+---
+
 # 🏥 Hospital Workflow
 
 ```text
@@ -105,7 +156,7 @@ CareFlow is designed to demonstrate **role-based workflows, local data managemen
 CareFlow implements role-based access control across **10 hospital roles**:
 
 | Role             | Main Responsibility                      |
-| ---------------- | ---------------------------------------- |
+| ---------------- | ----------------------------------------- |
 | `PATIENT`        | Patient-facing access                    |
 | `RECEPTIONIST`   | Patient registration and check-in        |
 | `QUEUE_OPERATOR` | Queue dispatch and ticket management     |
@@ -431,7 +482,7 @@ Key architectural concepts include:
 # 🛠️ Technology Stack
 
 | Area                    | Technology                            |
-| ----------------------- | ------------------------------------- |
+| ------------------------ | -------------------------------------- |
 | Platform                | Android                               |
 | Language                | Kotlin                                |
 | UI                      | Jetpack Compose                       |
@@ -679,7 +730,6 @@ It must not be used to make real clinical decisions, diagnose medical conditions
 
 * GitHub: https://github.com/kavigamage-da
 * LinkedIn: https://www.linkedin.com/in/kavindi-gamage-815049386
- 
 
 ---
 
