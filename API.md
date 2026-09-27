@@ -1,5 +1,7 @@
 # CareFlow REST API Specification
 
+> ?? Not yet implemented — target REST contract for a future backend phase.
+
 This contract defines the target backend REST interfaces for the hospital server. In Phase 1, repository interfaces reflect these endpoints, with SQLite/Room acting as the local authoritative cache.
 
 ```http
@@ -53,3 +55,4 @@ POST   /api/v1/billing/payments
 GET    /api/v1/audit/logs?from={ts}&to={ts}&action={act}
 GET    /api/v1/reports/daily-kpi
 ```
+

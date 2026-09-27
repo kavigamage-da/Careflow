@@ -1,6 +1,0 @@
-{
-  "name": "CareFlow",
-  "description": "CareFlow Hospital Management System - Enterprise healthcare operations and patient flow platform.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
